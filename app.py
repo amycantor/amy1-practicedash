@@ -7,9 +7,7 @@ from dash import Dash, dcc, html, Input, Output, ctx
 
 # One row = one order-product line. Order ID is absent: do not count orders.
 BASE_DIR = Path(__file__).resolve().parent if "__file__" in globals() else Path.cwd()
-DATA_PATH = BASE_DIR / "data" / "superstore_orders.csv"
-if not DATA_PATH.exists():  # notebook is one folder above the standalone project
-    DATA_PATH = BASE_DIR / "superstore_app" / "data" / "superstore_orders.csv"
+DATA_PATH = BASE_DIR / "superstore_orders.csv"
 df = pd.read_csv(DATA_PATH, parse_dates=["Order Date"])
 required = ["Row ID", "Order Date", "Region", "Category", "Sales", "Profit"]
 assert df[required].notna().all().all(), "Missing classroom data values"
@@ -27,7 +25,7 @@ def empty_figure(title):
     return fig
 
 
-ASSETS_DIR = DATA_PATH.parent.parent / "assets"
+ASSETS_DIR = BASE_DIR / "assets"
 app = Dash(__name__, assets_folder=str(ASSETS_DIR))
 server = app.server  # deployment target for gunicorn app:server
 app.title = "Superstore Explorer"
